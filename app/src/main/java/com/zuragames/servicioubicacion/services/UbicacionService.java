@@ -46,6 +46,7 @@ public class UbicacionService extends Service{
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "onCreate");
         super.onCreate();
         configuracionServicioUbicacion();
         configuracionWakeLock();
@@ -71,6 +72,7 @@ public class UbicacionService extends Service{
     }
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy");
         if (mFusedLocationClient != null)
             mFusedLocationClient.removeLocationUpdates(locationCallback);
         wakeLock.release();

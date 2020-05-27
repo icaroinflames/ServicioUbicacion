@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name=".services.UbicacionService"
+            android:foregroundServiceType="location"
             android:enabled="true"/>
 
         <activity android:name=".MainActivity">
