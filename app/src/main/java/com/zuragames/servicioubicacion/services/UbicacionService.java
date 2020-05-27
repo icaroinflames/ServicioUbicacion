@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -41,11 +42,13 @@ public class UbicacionService extends Service{
     private LocationCallback locationCallback;
     private FusedLocationProviderClient mFusedLocationClient;
 
+    PowerManager.WakeLock wakeLock;
 
     @Override
     public void onCreate() {
         super.onCreate();
         configuracionServicioUbicacion();
+        configuracionWakeLock();
     }
 
     @Override
@@ -70,6 +73,7 @@ public class UbicacionService extends Service{
     public void onDestroy() {
         if (mFusedLocationClient != null)
             mFusedLocationClient.removeLocationUpdates(locationCallback);
+        wakeLock.release();
         super.onDestroy();
     }
 
@@ -144,5 +148,12 @@ public class UbicacionService extends Service{
             }
         };
         mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+    }
+
+    private void configuracionWakeLock(){
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "MyApp::MyWakelockTag");
+        wakeLock.acquire();
     }
 }
